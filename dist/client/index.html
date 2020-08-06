@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Noot's Flat Earth Tavern</title>
+	<link rel="stylesheet" type="text/css" href="./index.css">
+
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script>
+		$(function () {
+			function setCookie(cname, cvalue, exdays) {
+				var d = new Date();
+				d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+				var expires = "expires=" + d.toUTCString();
+				document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+			}
+
+			function getCookie(cname) {
+				var name = cname + "=";
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return "";
+			}
+
+			var socket = io();
+
+			socket.on('REQ_AUTH', () => socket.emit("RES_AUTH", getCookie("prodigy_irc_auth_token")));
+			socket.on('UPDATE_AUTH', token => {
+				setCookie("prodigy_irc_auth_token", token, 99999999)
+				$('#messages').append($('<li>').text(`Your backup token is ${token}. If you clear your cookies or login using a different device, you will have to use this token to regain access into your account.\nDo NOT share this token with anyone!`));
+			})
+
+			socket.on('REQ_USERNAME', () => {
+				$('#messages').append($('<li>').text("Choose a username!"));
+				$('form').submit(function (e) {
+					e.preventDefault(); // prevents page reloading
+					socket.emit("RES_USERNAME", $('#m').val(), "pomfpomfkimochi");
+					$('#m').val('');
+					return false;
+				});
+			});
+
+			socket.on("ERR_AUTH", err => $('#messages').append($('<li>').text(err)));
+			socket.on("ERR_USERNAME", err => $('#messages').append($('<li>').text(err)));
+
+			socket.on("LOGGED_IN", player => {
+				$('#messages').append($('<li>').text(`Logged in as ${player.username} (${player.ign})`));
+				$('form').submit(function (e) {
+					e.preventDefault(); // prevents page reloading
+					socket.emit('MSG', $('#m').val());
+					$('#m').val('');
+					return false;
+				});
+			});
+
+			socket.on("MSG", (player, msg) => $('#messages').append($('<li>').text(`${player.username}: ${msg}`)));
+		});
+	</script>
+</head>
+
+<body>
+	<ul id="messages"></ul>
+	<form action="">
+		<input id="m" autocomplete="off" /><button>Send</button>
+	</form>
+</body>
+
+</html>

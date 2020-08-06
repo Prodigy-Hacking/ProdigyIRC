@@ -1,0 +1,17 @@
+{
+	"view": 0,
+	"message": 1,
+	"help": 1,
+	"info": 1,
+	"nick": 1,
+	"dm": 1,
+	"whois": 2,
+	"spy": 2,
+	"mute": 2,
+	"ban": 2,
+	"broadcast": 3,
+	"vanish": 3,
+	"role": 3,
+	"close": 3,
+	"move": 3
+}

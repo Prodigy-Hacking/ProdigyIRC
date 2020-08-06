@@ -14,8 +14,10 @@ export const handler = async (socket: Socket, io: Server) => {
             } else {
                 // Create username
                 databaseWrite(new Player(username, token, ign, 1));
-                res(token)
+                res(token);
             }
+
+            return rej(new Error("Done."));
         })
 
         async function generateToken(n: number): Promise<string> {

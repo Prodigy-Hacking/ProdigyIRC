@@ -34,6 +34,13 @@
 
 			var socket = io();
 
+			const privilegeColors = {
+				0: "white",
+				1: "black",
+				2: "green",
+				3: "red"
+			}
+
 			socket.on('REQ_AUTH', () => socket.emit("RES_AUTH", getCookie("prodigy_irc_auth_token")));
 			socket.on('UPDATE_AUTH', token => {
 				setCookie("prodigy_irc_auth_token", token, 99999999)
@@ -43,7 +50,6 @@
 			socket.on('REQ_USERNAME', () => {
 				$('#messages').append($('<li>').text("Choose a username!"));
 				$('form').submit(function (e) {
-					e.preventDefault(); // prevents page reloading
 					socket.emit("RES_USERNAME", $('#m').val(), "pomfpomfkimochi");
 					$('#m').val('');
 					return false;
@@ -57,13 +63,19 @@
 				$('#messages').append($('<li>').text(`Logged in as ${player.username} (${player.ign})`));
 				$('form').submit(function (e) {
 					e.preventDefault(); // prevents page reloading
-					socket.emit('MSG', $('#m').val());
+					socket.emit('MSG', $('#m').val(), getCookie("prodigy_irc_auth_token"));
 					$('#m').val('');
 					return false;
 				});
+				return;
 			});
 
-			socket.on("MSG", (username, ign, msg) => $('#messages').append($('<li>').text(`${username} (${ign}): ${msg}`)));
+			socket.on("MSG", (username, ign, privilege, msg) => {
+				$('#messages').append($('<li>').append(
+					$(`<span>`).css("color", privilegeColors[privilege]).text(`${username}`),
+					$(`<span>`).text(` (${ign}): ${msg}`)
+				))
+			});
 		});
 	</script>
 </head>

@@ -9,8 +9,7 @@ exports.handler = async (socket, io) => {
         // If not create an id token for them and request a username
         socket.emit("REQ_AUTH");
         socket.on("RES_AUTH", async (authToken) => {
-            authToken = await authToken ?? usercreate_js_1.handler(socket, io);
-            if (authToken.length <= 0) {
+            if (!(authToken && authToken.length > 0)) {
                 authToken = await usercreate_js_1.handler(socket, io);
             }
             // Search database for auth token

@@ -32,7 +32,7 @@ fs.readdir("./commands/", (err, files) => {
 
 	jsfiles.forEach(async(f, i) => {
 		const props = await import(`./commands/${f}`);
-		commands.push({ name: "props.help.name", props: props });
+		commands.push({ name: props.help?.name, props: props });
 	});
 
 	console.log(`[Commands]\t Loaded ${jsfiles.length} commands!`);
@@ -45,7 +45,7 @@ io.on("connection", async (socket) => {
 	socket.emit("LOGGED_IN", player)
 
 	// Set up message handler
-	socket.on("MSG", msg => messageHandler(socket, io, commands, player, msg));
+	socket.on("MSG", (msg, token) => messageHandler(socket, io, commands, token, msg));
 });
 
 http.listen(PORT, () => {

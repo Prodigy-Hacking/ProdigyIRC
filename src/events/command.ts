@@ -1,6 +1,7 @@
 import { Socket, Server } from "socket.io";
 import { Command } from "../types/Command";
 import { Player } from "../types/Player";
+const privileges = require("../../privileges.json");
 
 export const handler = async (socket: Socket, io: Server, commands: Command[], player: Player, msg: string) => {
     msg = msg.slice(1);
@@ -8,5 +9,8 @@ export const handler = async (socket: Socket, io: Server, commands: Command[], p
     const commandName = messageArray.shift();
 
     const command = commands.find((command: Command) => command.name == commandName);
-    if (player.privilege >= command?.props.privilege) command?.props.run(messageArray);
+    if (command) {
+        const privilegeNeeded = privileges[command.name];
+        if (player.privilege >= privilegeNeeded) command.props.run(socket, io, player, messageArray);   
+    }
 }

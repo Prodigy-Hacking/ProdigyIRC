@@ -46,7 +46,7 @@ fs_1.default.readdir("./commands/", (err, files) => {
     }
     jsfiles.forEach(async (f, i) => {
         const props = await Promise.resolve().then(() => __importStar(require(`./commands/${f}`)));
-        commands.push({ name: "props.help.name", props: props });
+        commands.push({ name: props.help?.name, props: props });
     });
     console.log(`[Commands]\t Loaded ${jsfiles.length} commands!`);
 });
@@ -55,7 +55,7 @@ io.on("connection", async (socket) => {
     const player = await userjoin_js_1.handler(socket, io);
     socket.emit("LOGGED_IN", player);
     // Set up message handler
-    socket.on("MSG", msg => message_js_1.handler(socket, io, commands, player, msg));
+    socket.on("MSG", (msg, token) => message_js_1.handler(socket, io, commands, token, msg));
 });
 http.listen(PORT, () => {
     console.log(`ProdigyIRC starting on port ${PORT}`);

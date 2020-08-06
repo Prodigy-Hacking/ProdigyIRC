@@ -18,6 +18,7 @@ exports.handler = async (socket, io) => {
                 database_1.databaseWrite(new Player_1.Player(username, token, ign, 1));
                 res(token);
             }
+            return rej(new Error("Done."));
         });
         async function generateToken(n) {
             let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

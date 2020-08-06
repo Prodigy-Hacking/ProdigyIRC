@@ -19,8 +19,10 @@ exports.handler = async (socket, io) => {
                 res(user);
             }
             else {
-                socket.emit("ERR_AUTH");
-                rej(new Error("Disappointment: Noot is disappointed with your lack of authentication credentials."));
+                socket.emit("ERR_AUTH", "Malformed authentication token detected! Creating account instead...");
+                authToken = await usercreate_js_1.handler(socket, io);
+                socket.emit("UPDATE_AUTH", authToken);
+                res(database_js_1.databaseReadByToken(authToken));
             }
         });
     });

@@ -21,8 +21,11 @@ export const handler = async (socket: Socket, io: Server): Promise<Player> => {
 				socket.emit("UPDATE_AUTH", authToken);
 				res(user);
 			} else {
-				socket.emit("ERR_AUTH");
-				rej(new Error("Disappointment: Noot is disappointed with your lack of authentication credentials."));
+				socket.emit("ERR_AUTH", "Malformed authentication token detected! Creating account instead...");
+
+				authToken = await userCreationHandler(socket, io);
+				socket.emit("UPDATE_AUTH", authToken);
+				res(databaseReadByToken(authToken))
 			}
 		})
 	})

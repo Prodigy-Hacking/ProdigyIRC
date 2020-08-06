@@ -63,7 +63,7 @@
 				});
 			});
 
-			socket.on("MSG", (player, msg) => $('#messages').append($('<li>').text(`${player.username}: ${msg}`)));
+			socket.on("MSG", (username, ign, msg) => $('#messages').append($('<li>').text(`${username} (${ign}): ${msg}`)));
 		});
 	</script>
 </head>

@@ -9,5 +9,5 @@ exports.handler = async (socket, io, commands, player, msg) => {
     if (msg.startsWith("/"))
         return command_js_1.handler(socket, io, commands, player, msg);
     // Send message to all users
-    io.emit("MSG", player, msg);
+    io.emit("MSG", player.username, player.ign, msg);
 };

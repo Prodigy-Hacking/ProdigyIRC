@@ -10,5 +10,5 @@ export const handler = async (socket: Socket, io: Server, commands: Command[], p
     if (msg.startsWith("/")) return commandHandler(socket, io, commands, player, msg);
 
     // Send message to all users
-    io.emit("MSG", player, msg);
+    io.emit("MSG", player.username, player.ign, msg);
 }

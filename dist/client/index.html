@@ -56,8 +56,8 @@
 				});
 			});
 
-			socket.on("ERR_AUTH", err => $('#messages').append($('<li>').text(err)));
-			socket.on("ERR_USERNAME", err => $('#messages').append($('<li>').text(err)));
+			socket.on("ERR_AUTH", err => $('#messages').append($('<li>').append($(`<span>`).css("color", "red").text(`${err}`))))
+			socket.on("ERR_USERNAME", err => $('#messages').append($('<li>').append($(`<span>`).css("color", "red").text(`${err}`))))
 
 			socket.on("LOGGED_IN", player => {
 				$('#messages').append($('<li>').text(`Logged in as ${player.username} (${player.ign})`));
@@ -78,7 +78,8 @@
 			});
 
 			socket.on("SYS", msg => {
-				$('#messages').append($('<li>').append($(`<span>`).css("color", "blue").text(`${msg}`)))});
+				$('#messages').append($('<li>').append($(`<span>`).css("color", "blue").text(`${msg}`)))
+			});
 		});
 	</script>
 </head>

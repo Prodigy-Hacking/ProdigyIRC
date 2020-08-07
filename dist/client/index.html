@@ -76,6 +76,9 @@
 					$(`<span>`).text(` (${ign}): ${msg}`)
 				))
 			});
+
+			socket.on("SYS", msg => {
+				$('#messages').append($('<li>').append($(`<span>`).css("color", "blue").text(`${msg}`)))});
 		});
 	</script>
 </head>

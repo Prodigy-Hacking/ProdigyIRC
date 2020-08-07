@@ -5,14 +5,13 @@ import { databaseReadByUsername, databaseUpdateByUsername, databaseWrite } from 
 export const run = async (socket: Socket, io: Server, player: Player, args: string[]) => {
     const username = args[0]
     const user = await databaseReadByUsername(username)
-    user.privilege = 0;
-    databaseUpdateByUsername(user, username);
 
     const userSocket = io.sockets.connected[user.socketID];
-    userSocket.emit("SYS", "You have been muted!")
+    userSocket.emit("SYS", "You have been kicked!")
+    userSocket.disconnect()
 }
 
 export const help = {
-    name: "mute",
-    description: "Mute a user."
+    name: "kick",
+    description: "Kick a user."
 }

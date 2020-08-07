@@ -9,11 +9,15 @@ exports.handler = async (socket, io, commands, token, msg) => {
     // Get player from token
     const player = await database_js_1.databaseReadByToken(token);
     if (player) {
-        // Set up command handler
-        if (msg.startsWith("/"))
-            return command_js_1.handler(socket, io, commands, player, msg);
-        // Send message to all users
-        io.emit("MSG", player.username, player.ign, player.privilege, msg);
+        if (player.privilege > 0) {
+            // Set up command handler
+            if (msg.startsWith("/"))
+                return command_js_1.handler(socket, io, commands, player, msg);
+            // Send message to all users
+            io.emit("MSG", player.username, player.ign, player.privilege, msg);
+        }
+        else
+            socket.emit("SYS", "You are muted!");
     }
     else {
         socket.emit("ERR_AUTH", "Malformed authentication token detected! Please reload the page.");

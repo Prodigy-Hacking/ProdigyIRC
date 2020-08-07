@@ -13,17 +13,24 @@ exports.handler = async (socket, io) => {
                 authToken = await usercreate_js_1.handler(socket, io);
             }
             // Search database for auth token
-            const user = await database_js_1.databaseReadByToken(authToken);
+            let user = await database_js_1.databaseReadByToken(authToken);
             if (user) {
+                if (user.privilege < 0) {
+                    socket.emit("ERR_AUTH", "Your account is banned!");
+                    socket.disconnect();
+                    return rej(new Error("Account banned."));
+                }
                 socket.emit("UPDATE_AUTH", authToken);
-                res(user);
             }
             else {
                 socket.emit("ERR_AUTH", "Malformed authentication token detected! Creating account instead...");
                 authToken = await usercreate_js_1.handler(socket, io);
                 socket.emit("UPDATE_AUTH", authToken);
-                res(database_js_1.databaseReadByToken(authToken));
+                user = await database_js_1.databaseReadByToken(authToken);
             }
+            user.socketID = socket.id;
+            database_js_1.databaseUpdateByToken(user, authToken);
+            res(user);
         });
     });
 };

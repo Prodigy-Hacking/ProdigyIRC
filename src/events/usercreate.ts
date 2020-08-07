@@ -13,7 +13,7 @@ export const handler = async (socket: Socket, io: Server) => {
                 rej(new Error("Username taken!"));
             } else {
                 // Create username
-                databaseWrite(new Player(username, token, ign, 1));
+                databaseWrite(new Player(username, token, socket.id, ign, 1));
                 res(token);
             }
 

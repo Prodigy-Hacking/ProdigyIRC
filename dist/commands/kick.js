@@ -5,13 +5,11 @@ const database_1 = require("../utils/database");
 exports.run = async (socket, io, player, args) => {
     const username = args[0];
     const user = await database_1.databaseReadByUsername(username);
-    user.privilege = -1;
-    database_1.databaseUpdateByUsername(user, username);
     const userSocket = io.sockets.connected[user.socketID];
-    userSocket.emit("SYS", "You have been banned!");
+    userSocket.emit("SYS", "You have been kicked!");
     userSocket.disconnect();
 };
 exports.help = {
-    name: "ban",
-    description: "Ban a user."
+    name: "kick",
+    description: "Kick a user."
 };

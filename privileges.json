@@ -8,6 +8,7 @@
 	"whois": 2,
 	"spy": 2,
 	"mute": 2,
+	"kick": 2,
 	"ban": 2,
 	"broadcast": 3,
 	"vanish": 3,

@@ -7,12 +7,15 @@ exports.run = async (socket, io, player, args) => {
     const user = await database_1.databaseReadByUsername(username);
     const userSocket = io.sockets.connected[user.socketID];
     userSocket.emit("REQ_LOC");
-    userSocket;
-    userSocket.on("RES_LOC", loc => {
+    userSocket.once("RES_LOC", loc => {
         socket.emit("LOC", loc);
     });
 };
 exports.help = {
     name: "tp",
-    description: "Teleport to player."
+    description: "Teleport to a player.",
+    usages: [
+        "/tp username",
+        "/tp teleporter teleportee"
+    ]
 };

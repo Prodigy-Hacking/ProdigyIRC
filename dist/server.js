@@ -54,8 +54,13 @@ io.on("connection", async (socket) => {
     // Handle user joining
     const player = await userjoin_js_1.handler(socket, io);
     socket.emit("LOGGED_IN", player);
+    io.emit("CON", player.username, player.ign, player.privilege);
     // Set up message handler
     socket.on("MSG", (msg, token) => message_js_1.handler(socket, io, commands, token, msg));
+    // Set up disconnect handler
+    socket.on("disconnect", () => {
+        io.emit("DISCON", player.username, player.ign, player.privilege);
+    });
 });
 http.listen(PORT, () => {
     console.log(`ProdigyIRC starting on port ${PORT}`);

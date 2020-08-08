@@ -9,7 +9,14 @@ exports.handler = async (socket, io, commands, player, msg) => {
     const command = commands.find((command) => command.name == commandName);
     if (command) {
         const privilegeNeeded = privileges[command.name];
-        if (player.privilege >= privilegeNeeded)
-            command.props.run(socket, io, player, messageArray);
+        if (player.privilege >= privilegeNeeded) {
+            if (command.name == "help")
+                command.props.run(socket, io, commands, player, messageArray);
+            else
+                command.props.run(socket, io, player, messageArray);
+        }
+        else {
+            return socket.emit("ERR", "You don't have permission to run this command!");
+        }
     }
 };

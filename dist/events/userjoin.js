@@ -16,14 +16,14 @@ exports.handler = async (socket, io) => {
             let user = await database_js_1.databaseReadByToken(authToken);
             if (user) {
                 if (user.privilege < 0) {
-                    socket.emit("ERR_AUTH", "Your account is banned!");
+                    socket.emit("ERR", "Your account is banned!");
                     socket.disconnect();
                     return rej(new Error("Account banned."));
                 }
                 socket.emit("UPDATE_AUTH", authToken);
             }
             else {
-                socket.emit("ERR_AUTH", "Malformed authentication token detected! Creating account instead...");
+                socket.emit("ERR", "Malformed authentication token detected! Creating account instead...");
                 authToken = await usercreate_js_1.handler(socket, io);
                 socket.emit("UPDATE_AUTH", authToken);
                 user = await database_js_1.databaseReadByToken(authToken);

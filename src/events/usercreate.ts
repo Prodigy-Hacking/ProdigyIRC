@@ -7,10 +7,9 @@ export const handler = async (socket: Socket, io: Server) => {
         const token = await generateToken(32);
         socket.emit("REQ_USERNAME");
         socket.once("RES_USERNAME", async (username, ign) => {
-            console.log("User tried to set username");
             // Check if username already exists
             if (await databaseReadByUsername(username)) {
-                socket.emit("ERR_USERNAME", "Username taken!");
+                socket.emit("ERR", "Username taken!");
                 rej(new Error("Username taken!"));
             } else {
                 // Create username
@@ -27,7 +26,7 @@ export const handler = async (socket: Socket, io: Server) => {
             for (let i = 0; i < n; i++) {
                 token += chars[Math.floor(Math.random() * chars.length)];
             }
-            
+
             return await databaseReadByToken(token) ? generateToken(n) : token;
         }
     })

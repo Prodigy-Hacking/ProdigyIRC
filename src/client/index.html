@@ -67,8 +67,7 @@
 				$('#messages').append($('<li>').text("Choose a username!"));
 			});
 
-			socket.on("ERR_AUTH", err => $('#messages').append($('<li>').append($(`<span>`).css("color", "red").text(`${err}`))))
-			socket.on("ERR_USERNAME", err => $('#messages').append($('<li>').append($(`<span>`).css("color", "red").text(`${err}`))))
+			socket.on("ERR", err => $('#messages').append($('<li>').append($(`<span>`).css("color", "red").text(`${err}`))))
 
 			socket.on("LOGGED_IN", player => {
 				$('#messages').append($('<li>').text(`Logged in as ${player.username} (${player.ign})`));
@@ -86,6 +85,21 @@
 			socket.on("SYS", msg => {
 				$('#messages').append($('<li>').append($(`<span>`).css("color", "blue").text(`${msg}`)))
 			});
+
+			socket.on("CON", (username, ign, privilege) => {
+				$('#messages').append($('<li>').append(
+					$(`<span>`).text(`Player `),
+					$(`<span>`).css("color", privilegeColors[privilege]).text(`${username}`),
+					$(`<span>`).text(` (${ign}) connected!`)
+				))
+			})
+
+			socket.on("DISCON", (username, ign, privilege) => {
+				$('#messages').append($('<li>').append(
+					$(`<span>`).css("color", privilegeColors[privilege]).text(`Player ${username}`),
+					$(`<span>`).text(`(${ign}) disconnected!`)
+				))
+			})
 		});
 	</script>
 </head>

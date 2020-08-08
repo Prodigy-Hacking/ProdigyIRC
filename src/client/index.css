@@ -6,6 +6,9 @@
 body {
     font: 13px Helvetica, Arial;
 }
+span {
+    white-space: pre-line
+}
 form {
     background: #000;
     padding: 3px;

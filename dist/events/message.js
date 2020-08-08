@@ -17,9 +17,9 @@ exports.handler = async (socket, io, commands, token, msg) => {
             io.emit("MSG", player.username, player.ign, player.privilege, msg);
         }
         else
-            socket.emit("SYS", "You are muted!");
+            socket.emit("ERR", "You are muted!");
     }
     else {
-        socket.emit("ERR_AUTH", "Malformed authentication token detected! Please reload the page.");
+        socket.emit("ERR", "Malformed authentication token detected! Please reload the page.");
     }
 };

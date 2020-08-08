@@ -17,8 +17,8 @@ export const handler = async (socket: Socket, io: Server, commands: Command[], t
 
             // Send message to all users
             io.emit("MSG", player.username, player.ign, player.privilege, msg);
-        } else socket.emit("SYS", "You are muted!")
+        } else socket.emit("ERR", "You are muted!")
     } else {
-        socket.emit("ERR_AUTH", "Malformed authentication token detected! Please reload the page.")
+        socket.emit("ERR", "Malformed authentication token detected! Please reload the page.")
     }
 }

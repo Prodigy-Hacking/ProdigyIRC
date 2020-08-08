@@ -41,19 +41,30 @@
 				3: "red"
 			}
 
+			var loggedIn = false;
+
 			socket.on('REQ_AUTH', () => socket.emit("RES_AUTH", getCookie("prodigy_irc_auth_token")));
 			socket.on('UPDATE_AUTH', token => {
 				setCookie("prodigy_irc_auth_token", token, 99999999)
 				$('#messages').append($('<li>').text(`Your backup token is ${token}. If you clear your cookies or login using a different device, you will have to use this token to regain access into your account.\nDo NOT share this token with anyone!`));
 			})
 
-			socket.on('REQ_USERNAME', () => {
-				$('#messages').append($('<li>').text("Choose a username!"));
-				$('form').submit(function (e) {
+			$('form').submit(function (e) {
+				if (loggedIn) {
+					e.preventDefault(); // prevents page reloading
+					socket.emit('MSG', $('#m').val(), getCookie("prodigy_irc_auth_token"));
+					$('#m').val('');
+					return false;
+				} else {
 					socket.emit("RES_USERNAME", $('#m').val(), "pomfpomfkimochi");
 					$('#m').val('');
 					return false;
-				});
+				}
+
+			});
+
+			socket.on('REQ_USERNAME', () => {
+				$('#messages').append($('<li>').text("Choose a username!"));
 			});
 
 			socket.on("ERR_AUTH", err => $('#messages').append($('<li>').append($(`<span>`).css("color", "red").text(`${err}`))))
@@ -61,13 +72,8 @@
 
 			socket.on("LOGGED_IN", player => {
 				$('#messages').append($('<li>').text(`Logged in as ${player.username} (${player.ign})`));
-				$('form').submit(function (e) {
-					e.preventDefault(); // prevents page reloading
-					socket.emit('MSG', $('#m').val(), getCookie("prodigy_irc_auth_token"));
-					$('#m').val('');
-					return false;
-				});
-				return;
+
+				loggedIn = true;
 			});
 
 			socket.on("MSG", (username, ign, privilege, msg) => {

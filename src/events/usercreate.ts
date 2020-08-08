@@ -6,7 +6,8 @@ export const handler = async (socket: Socket, io: Server) => {
     return new Promise(async (res, rej) => {
         const token = await generateToken(32);
         socket.emit("REQ_USERNAME");
-        socket.on("RES_USERNAME", async (username, ign) => {
+        socket.once("RES_USERNAME", async (username, ign) => {
+            console.log("User tried to set username");
             // Check if username already exists
             if (await databaseReadByUsername(username)) {
                 socket.emit("ERR_USERNAME", "Username taken!");

@@ -5,6 +5,7 @@
 	"info": 1,
 	"nick": 1,
 	"dm": 1,
+	"tp": 1,
 	"whois": 2,
 	"spy": 2,
 	"mute": 2,

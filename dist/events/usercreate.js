@@ -7,7 +7,8 @@ exports.handler = async (socket, io) => {
     return new Promise(async (res, rej) => {
         const token = await generateToken(32);
         socket.emit("REQ_USERNAME");
-        socket.on("RES_USERNAME", async (username, ign) => {
+        socket.once("RES_USERNAME", async (username, ign) => {
+            console.log("User tried to set username");
             // Check if username already exists
             if (await database_1.databaseReadByUsername(username)) {
                 socket.emit("ERR_USERNAME", "Username taken!");

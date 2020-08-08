@@ -9,7 +9,7 @@ export const handler = async (socket: Socket, io: Server): Promise<Player> => {
 		// When a user joins, check if they have an id token, if they do, use that to find username
 		// If not create an id token for them and request a username
 		socket.emit("REQ_AUTH");
-		socket.on("RES_AUTH", async authToken => {
+		socket.once("RES_AUTH", async authToken => {
 			if (!(authToken && authToken.length > 0)) {
 				authToken = await userCreationHandler(socket, io);
 			}

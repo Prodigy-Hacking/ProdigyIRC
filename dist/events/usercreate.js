@@ -13,6 +13,10 @@ exports.handler = async (socket, io) => {
                 socket.emit("ERR", "Username taken!");
                 rej(new Error("Username taken!"));
             }
+            else if (!/^([a-z0-9]{2,16})$/i.test(username)) {
+                socket.emit("ERR", "Username must be an alphanumeric string between 2 and 16 characters!");
+                rej(new Error("Username must be an alphanumeric string between 2 and 16 characters!"));
+            }
             else {
                 // Create username
                 database_1.databaseWrite(new Player_1.Player(username, token, socket.id, ign, 1));

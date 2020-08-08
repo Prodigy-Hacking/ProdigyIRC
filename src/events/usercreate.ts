@@ -11,6 +11,9 @@ export const handler = async (socket: Socket, io: Server) => {
             if (await databaseReadByUsername(username)) {
                 socket.emit("ERR", "Username taken!");
                 rej(new Error("Username taken!"));
+            } else if (!/^([a-z0-9]{2,16})$/i.test(username)) {
+                socket.emit("ERR", "Username must be an alphanumeric string between 2 and 16 characters!");
+                rej(new Error("Username must be an alphanumeric string between 2 and 16 characters!"));
             } else {
                 // Create username
                 databaseWrite(new Player(username, token, socket.id, ign, 1));

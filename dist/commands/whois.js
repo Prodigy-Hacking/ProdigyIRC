@@ -6,5 +6,6 @@ exports.help = {
     description: "Get hidden information about a user.",
     usages: [
         "/whois username"
-    ]
+    ],
+    permission: "MANAGE_USERS"
 };

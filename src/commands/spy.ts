@@ -3,5 +3,6 @@ export const help = {
     description: "Login as a different user.",
     usages: [
         "/spy username"
-    ]
+    ],
+    permission: "MANAGE_USERS"
 }

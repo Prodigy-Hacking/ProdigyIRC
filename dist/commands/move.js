@@ -7,5 +7,6 @@ exports.help = {
     usages: [
         "/move username roomid",
         "/move roomid roomid2"
-    ]
+    ],
+    permission: "MANAGE_SERVER"
 };

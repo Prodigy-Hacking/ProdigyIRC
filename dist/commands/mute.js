@@ -23,5 +23,6 @@ exports.help = {
         "/mute username 5m",
         "/mute username 2h",
         "/mute username 1d"
-    ]
+    ],
+    permission: "MUTE_USERS"
 };

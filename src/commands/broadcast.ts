@@ -4,5 +4,6 @@ export const help = {
     usages: [
         "/broadcast msg",
         "/broadcast msg roomid"
-    ]
+    ],
+    permission: "MANAGE_SERVER"
 }

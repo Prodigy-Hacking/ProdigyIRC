@@ -16,7 +16,7 @@ export const handler = async (socket: Socket, io: Server) => {
                 rej(new Error("Username must be an alphanumeric string between 2 and 16 characters!"));
             } else {
                 // Create username
-                databaseWrite(new Player(username, token, socket.id, ign, 1));
+                databaseWrite(new Player(username, token, socket.id, ign, []));
                 res(token);
             }
 

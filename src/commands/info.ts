@@ -3,5 +3,6 @@ export const help = {
     description: "Get info about a user.",
     usages: [
         "/info username"
-    ]
+    ],
+    permission: "READ_PLAYER_INFO"
 }

@@ -19,5 +19,6 @@ exports.help = {
     description: "Change the role of a user.",
     usages: [
         "/role username [0-3]"
-    ]
+    ],
+    permission: "MANAGE_USERS"
 };

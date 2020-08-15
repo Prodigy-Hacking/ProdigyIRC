@@ -1,6 +1,7 @@
 import fs from "fs";
 import { join } from "path";
 import { Player } from "../types/Player";
+import Role from "../types/Role";
 
 export const databaseReadByToken = async (token: string): Promise<Player> => {
     const database = JSON.parse(fs.readFileSync(join(__dirname, "../../userbase.json")).toString());
@@ -44,4 +45,18 @@ export const databaseUpdateByUsername = async (player: Player, username: string)
     }
 
     await fs.writeFileSync(join(__dirname, "../../userbase.json"), JSON.stringify(database));
+}
+
+export const databaseReadRole = async (roleName: string) => {
+    const database = JSON.parse(fs.readFileSync(join(__dirname, "../../roles.json")).toString());
+
+    return await database.find((role: Role) => role.name == roleName);
+}
+
+export const databaseWriteRole = async (role: Role) => {
+    const database = JSON.parse(fs.readFileSync(join(__dirname, "../../roles.json")).toString());
+
+    database.push(role);
+
+    await fs.writeFileSync(join(__dirname, "../../roles.json"), JSON.stringify(database));
 }

@@ -7,7 +7,7 @@ export const run = async (socket: Socket, io: Server, player: Player, args: stri
     const user = await databaseReadByUsername(username)
 
     if (!user) return socket.emit("ERR", "This user doesn't exist!")
-    if (user.privilege >= player.privilege) return socket.emit("ERR", "Cannot mute a user with the same or higher rank!")
+    if (user.getRoleLevel() <= player.getRoleLevel()) return socket.emit("ERR", "Cannot mute a user with the same or higher rank!")
 
     user.privilege = 0;
     databaseUpdateByUsername(user, username);
@@ -26,5 +26,6 @@ export const help = {
         "/mute username 5m",
         "/mute username 2h",
         "/mute username 1d"
-    ]
+    ],
+    permission: "MUTE_USERS"
 }

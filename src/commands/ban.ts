@@ -27,5 +27,6 @@ export const help = {
         "/ban username 5m",
         "/ban username 2h",
         "/ban username 1d"
-    ]
+    ],
+    permission: "BAN_USERS"
 }

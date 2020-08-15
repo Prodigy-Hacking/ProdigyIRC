@@ -19,7 +19,7 @@ exports.handler = async (socket, io) => {
             }
             else {
                 // Create username
-                database_1.databaseWrite(new Player_1.Player(username, token, socket.id, ign, 1));
+                database_1.databaseWrite(new Player_1.Player(username, token, socket.id, ign, []));
                 res(token);
             }
             return rej(new Error("Done."));

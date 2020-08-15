@@ -9,12 +9,12 @@ exports.handler = async (socket, io, commands, token, msg) => {
     // Get player from token
     const player = await database_js_1.databaseReadByToken(token);
     if (player) {
-        if (player.privilege > 0) {
-            // Set up command handler
-            if (msg.startsWith("/"))
-                return command_js_1.handler(socket, io, commands, player, msg);
+        // Set up command handler
+        if (msg.startsWith("/"))
+            return command_js_1.handler(socket, io, commands, player, msg);
+        if (player.hasPerm("SEND_MSG")) {
             // Send message to all users
-            io.emit("MSG", player.username, player.ign, player.privilege, msg);
+            io.emit("MSG", player.username, player.ign, player.roles, msg);
         }
         else
             socket.emit("ERR", "You are muted!");

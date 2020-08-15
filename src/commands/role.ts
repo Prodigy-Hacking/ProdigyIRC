@@ -4,16 +4,19 @@ import { databaseReadByUsername, databaseUpdateByUsername, databaseWrite } from 
 
 export const run = async (socket: Socket, io: Server, player: Player, args: string[]) => {
     const username = args[0]
-    const newPrivilege = +args[1]
+    const roleName = args[1]
     const user = await databaseReadByUsername(username)
+    const role = await databaseReadRole(username)
 
     if (!user) return socket.emit("ERR", "This user doesn't exist!")
-    if (user.privilege >= player.privilege) return socket.emit("ERR", "Cannot change the role of a user with the same or higher rank!")
+    if (!role) return socket.emit("ERR", "This role doesn't exist!")
+    if (user.roles.find(r => r == role)) return socket.emit("ERR", "This user already has this role!")
+    if (user.getRoleLevel() <= player.getRoleLevel()) return socket.emit("ERR", "Cannot change the role of a user with the same or higher rank!")
 
-    user.privilege = Math.min(Math.max(newPrivilege, 0), 3)
+    user.roles.push(role);
     databaseUpdateByUsername(user, username)
 
-    socket.emit("SYS", `${username}'s role was updated to ${newPrivilege} successfully!`)
+    socket.emit("SYS", `${username} now has the ${roleName} role!`)
 }
 
 export const help = {
@@ -21,5 +24,6 @@ export const help = {
     description: "Change the role of a user.",
     usages: [
         "/role username [0-3]"
-    ]
+    ],
+    permission: "MANAGE_USERS"
 }

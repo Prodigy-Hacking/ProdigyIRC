@@ -8,12 +8,12 @@ exports.run = async (socket, io, commands, player, args) => {
         const command = commands.find(command => command.name == commandName);
         if (!command)
             return socket.emit("ERR", `No command called ${commandName}`);
-        socket.emit("SYS", `HELP - ${command.name}:\n\nDescription: ${command.props.help.description}\nUsage: ${command.props.help.usages.join(", ")}`);
+        socket.emit("SYS", `HELP - ${command.name}:\n\nDescription: ${command.description}\nUsage: ${command.usages.join(", ")}`);
     }
     else {
         socket.emit("SYS", "HELP\n\n" + commands
-            .filter(command => player.privilege >= privileges[command.name])
-            .map(command => `${command.name} - ${command.props.help.description}`).join("\n"));
+            .filter(command => player.hasPerm(command.permission))
+            .map(command => `${command.name} - ${command.description}`).join("\n"));
     }
 };
 exports.help = {
@@ -22,5 +22,6 @@ exports.help = {
     usages: [
         "/help",
         "/help commandname"
-    ]
+    ],
+    permission: "CONNECT"
 };

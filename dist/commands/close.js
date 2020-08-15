@@ -7,5 +7,6 @@ exports.help = {
     usages: [
         "/close",
         "/close roomid"
-    ]
+    ],
+    permission: "MANAGE_SERVER"
 };

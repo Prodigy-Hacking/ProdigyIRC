@@ -23,5 +23,6 @@ export const help = {
     description: "Kick a user.",
     usages: [
         "/kick username"
-    ]
+    ],
+    permission: "KICK_USERS"
 }

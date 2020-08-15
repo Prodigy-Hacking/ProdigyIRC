@@ -18,7 +18,7 @@ export const handler = async (socket: Socket, io: Server): Promise<Player> => {
 			let user = await databaseReadByToken(authToken)
 
 			if (user) {
-				if (user.privilege < 0) {
+				if (!user.hasPerm("CONNECT")) {
 					socket.emit("ERR", "Your account is banned!");
 					socket.disconnect();
 					return rej(new Error("Account banned."));

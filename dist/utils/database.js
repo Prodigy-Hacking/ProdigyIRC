@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.databaseUpdateByUsername = exports.databaseUpdateByToken = exports.databaseWrite = exports.databaseReadByUsername = exports.databaseReadByToken = void 0;
+exports.databaseWriteRole = exports.databaseUpdateByUsername = exports.databaseUpdateByToken = exports.databaseWrite = exports.databaseReadByUsername = exports.databaseReadByToken = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = require("path");
 exports.databaseReadByToken = async (token) => {
@@ -34,4 +34,9 @@ exports.databaseUpdateByUsername = async (player, username) => {
         database[database.indexOf(existingUser)] = player;
     }
     await fs_1.default.writeFileSync(path_1.join(__dirname, "../../userbase.json"), JSON.stringify(database));
+};
+exports.databaseWriteRole = async (role) => {
+    const database = JSON.parse(fs_1.default.readFileSync(path_1.join(__dirname, "../../roles.json")).toString());
+    database.push(role);
+    await fs_1.default.writeFileSync(path_1.join(__dirname, "../../roles.json"), JSON.stringify(database));
 };

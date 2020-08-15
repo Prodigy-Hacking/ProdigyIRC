@@ -17,5 +17,6 @@ exports.help = {
     usages: [
         "/tp username",
         "/tp teleporter teleportee"
-    ]
+    ],
+    permission: "READ_PLAYER_INFO"
 };

@@ -31,6 +31,7 @@ const http = require('http').Server(app);
 const io = socket_io_1.default(http);
 const message_js_1 = require("./events/message.js");
 const userjoin_js_1 = require("./events/userjoin.js");
+const Command_js_1 = require("./types/Command.js");
 const PORT = process.env.port ?? 3000;
 const commands = [];
 app.get("/", (req, res) => {
@@ -46,7 +47,7 @@ fs_1.default.readdir("./commands/", (err, files) => {
     }
     jsfiles.forEach(async (f, i) => {
         const props = await Promise.resolve().then(() => __importStar(require(`./commands/${f}`)));
-        commands.push({ name: props.help?.name, props: props });
+        commands.push(new Command_js_1.Command(props));
     });
     console.log(`[Commands]\t Loaded ${jsfiles.length} commands!`);
 });
@@ -54,12 +55,12 @@ io.on("connection", async (socket) => {
     // Handle user joining
     const player = await userjoin_js_1.handler(socket, io);
     socket.emit("LOGGED_IN", player);
-    io.emit("CON", player.username, player.ign, player.privilege);
+    io.emit("CON", player.username, player.ign, player.roles);
     // Set up message handler
     socket.on("MSG", (msg, token) => message_js_1.handler(socket, io, commands, token, msg));
     // Set up disconnect handler
     socket.on("disconnect", () => {
-        io.emit("DISCON", player.username, player.ign, player.privilege);
+        io.emit("DISCON", player.username, player.ign, player.roles);
     });
 });
 http.listen(PORT, () => {

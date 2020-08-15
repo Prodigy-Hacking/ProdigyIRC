@@ -15,7 +15,7 @@ exports.handler = async (socket, io) => {
             // Search database for auth token
             let user = await database_js_1.databaseReadByToken(authToken);
             if (user) {
-                if (user.privilege < 0) {
+                if (!user.hasPerm("CONNECT")) {
                     socket.emit("ERR", "Your account is banned!");
                     socket.disconnect();
                     return rej(new Error("Account banned."));
